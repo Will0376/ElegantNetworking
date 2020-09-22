@@ -1,6 +1,6 @@
 package hohserg.elegant.networking.api;
 
-import hohserg.elegant.networking.impl.DataUtils;
+import hohserg.elegant.networking.impl.DataUtils2;
 import io.netty.buffer.ByteBuf;
 
 /**
@@ -18,7 +18,7 @@ public interface IByteBufSerializable {
      * @return ByteBuf representation
      */
     default ByteBuf serialize() {
-        return DataUtils.serialize(this);
+        return DataUtils2.serialize(this);
     }
 
 }

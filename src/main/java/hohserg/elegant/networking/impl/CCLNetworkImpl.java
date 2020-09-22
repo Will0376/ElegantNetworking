@@ -76,7 +76,7 @@ public class CCLNetworkImpl implements Network<PacketCustom> {
         ByteBuf buffer = Unpooled.buffer(size);
         packetRepresent.readBytes(buffer, size);
 
-        return DataUtils.unserialize(buffer, packetRepresent.getType());
+        return DataUtils2.unserialize(buffer, packetRepresent.getType());
     }
 
     @Override
