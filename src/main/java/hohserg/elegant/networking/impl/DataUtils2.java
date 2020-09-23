@@ -23,12 +23,12 @@ import static hohserg.elegant.networking.impl.DataUtils2.CollectionFlags.Element
 public class DataUtils2 {
 
 
-
     public static ByteBuf serialize(Object value) {
         ByteBuf r = Unpooled.buffer();
         serialize(value, r);
         return r;
     }
+
     /**
      * Generic unserialization
      *
@@ -67,6 +67,7 @@ public class DataUtils2 {
             else if (valueClass == Character.class) acc.writeChar((Character) value);
             else if (valueClass == Boolean.class) acc.writeBoolean((Boolean) value);
             else if (valueClass == String.class) ByteBufUtils.writeUTF8String(acc, (String) value);
+            else if (value instanceof Enum) ByteBufUtils.writeUTF8String(acc, ((Enum) value).name());
             else if (value instanceof Map) {
                 Map<Object, Object> mapValue = (Map<Object, Object>) value;
                 acc.writeShort(mapValue.size());
@@ -105,7 +106,7 @@ public class DataUtils2 {
                 int second = acc.readableBytes();
 
                 acc.writerIndex(first);
-                acc.writeShort(second-first);
+                acc.writeShort(second - first);
 
             } else try {
                 for (Field field : value.getClass().getDeclaredFields())
@@ -145,6 +146,7 @@ public class DataUtils2 {
             else if (valueClass == Character.class) return buf.readChar();
             else if (valueClass == Boolean.class) return buf.readBoolean();
             else if (valueClass == String.class) return ByteBufUtils.readUTF8String(buf);
+            else if (Enum.class.isAssignableFrom(valueClass)) return Enum.valueOf((Class) valueClass, ByteBufUtils.readUTF8String(buf));
             else if (Map.class.isAssignableFrom(valueClass)) {
                 CollectionBuilder collectionBuilder = supportedCollections.getOrDefault(valueClass, hashMapBuilder).get();
 
