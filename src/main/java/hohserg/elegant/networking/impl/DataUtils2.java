@@ -100,13 +100,10 @@ public class DataUtils2 {
                 }
             } else if (value instanceof IByteBufSerializable && haveUnserializeConstructor(valueClass)) {
 
-                int first = acc.readableBytes();
-                acc.writeShort(0);
-                ((IByteBufSerializable) value).serialize(acc);
-                int second = acc.readableBytes();
-
-                acc.writerIndex(first);
-                acc.writeShort(second - first);
+                ByteBuf buffer = Unpooled.buffer();
+                ((IByteBufSerializable) value).serialize(buffer);
+                acc.writeShort(buffer.readableBytes());
+                acc.writeBytes(buffer);
 
             } else try {
                 for (Field field : value.getClass().getDeclaredFields())
