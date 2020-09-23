@@ -3,6 +3,7 @@ package hohserg.elegant.networking.impl;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
+import hohserg.elegant.networking.api.IByteBufSerializable;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import net.minecraftforge.fml.common.network.ByteBufUtils;
@@ -42,17 +43,7 @@ public class DataUtils2 {
      */
     static <A> A unserialize(ByteBuf buf, int packetId) {
         try {
-            Class<?> valueClass = Class.forName(ElegantNetworking.packetClassNameById.get(packetId));
-            try {
-                Constructor<?> unserializeConstructor = valueClass.getDeclaredConstructor(ByteBuf.class);
-                try {
-                    return (A) unserializeConstructor.newInstance(buf);
-                } catch (InstantiationException | IllegalAccessException | InvocationTargetException e) {
-                    throw new UnsupportedOperationException("Unable to unserialize packet: unserialization constructor exists, but perform exception", e);
-                }
-            } catch (NoSuchMethodException e) {
-                return (A) unserialize(buf, valueClass);
-            }
+            return (A) unserialize(buf, Class.forName(ElegantNetworking.packetClassNameById.get(packetId)));
         } catch (ClassNotFoundException e) {
             throw new UnsupportedOperationException("Unable to unserialize packet: class not found", e);
         }
@@ -105,6 +96,10 @@ public class DataUtils2 {
                         collectionValue.forEach(e -> serialize(e, acc));
                     }
                 }
+            } else if (value instanceof IByteBufSerializable && haveUnserializeConstructor(valueClass)) {
+                ByteBuf byteBufRepr = ((IByteBufSerializable) value).serialize();
+                acc.writeShort(byteBufRepr.readableBytes());
+                acc.writeBytes(byteBufRepr);
             } else try {
                 for (Field field : value.getClass().getDeclaredFields())
                     if (!Modifier.isTransient(field.getModifiers())) {
@@ -191,6 +186,14 @@ public class DataUtils2 {
 
                 }
                 return collectionBuilder.build();
+            } else if (IByteBufSerializable.class.isAssignableFrom(valueClass) && haveUnserializeConstructor(valueClass)) {
+                try {
+                    Constructor<A> unserializeConstructor = valueClass.getDeclaredConstructor(ByteBuf.class);
+                    short chunkSize = buf.readShort();
+                    return unserializeConstructor.newInstance(buf.readBytes(chunkSize));
+                } catch (NoSuchMethodException | InstantiationException | IllegalAccessException | InvocationTargetException e) {
+                    throw new UnsupportedOperationException("Unable to unserialize packet with unserialization constructor " + valueClass, e);
+                }
             } else
                 try {
                     try {
@@ -242,6 +245,14 @@ public class DataUtils2 {
                 } catch (IllegalAccessException | InstantiationException | InvocationTargetException e) {
                     throw new UnsupportedOperationException("Unable to unserialize object " + valueClass, e);
                 }
+        }
+    }
+
+    private static <A> boolean haveUnserializeConstructor(Class<A> valueClass) {
+        try {
+            return valueClass.getDeclaredConstructor(ByteBuf.class) != null;
+        } catch (NoSuchMethodException e) {
+            return false;
         }
     }
 
