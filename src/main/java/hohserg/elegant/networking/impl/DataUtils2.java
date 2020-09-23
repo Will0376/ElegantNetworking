@@ -23,18 +23,12 @@ import static hohserg.elegant.networking.impl.DataUtils2.CollectionFlags.Element
 public class DataUtils2 {
 
 
-    /**
-     * Generic serialization
-     *
-     * @param value Some object
-     * @return ByteBuf representation of object
-     */
+
     public static ByteBuf serialize(Object value) {
         ByteBuf r = Unpooled.buffer();
         serialize(value, r);
         return r;
     }
-
     /**
      * Generic unserialization
      *
@@ -53,7 +47,14 @@ public class DataUtils2 {
         ElementsCongeneric, ElementsHeterogeneric
     }
 
-    private static void serialize(Object value, ByteBuf acc) {
+    /**
+     * Generic serialization
+     *
+     * @param value Some object
+     * @param acc
+     * @return ByteBuf representation of object
+     */
+    public static void serialize(Object value, ByteBuf acc) {
         acc.writeBoolean(value == null);
         if (value != null) {
             Class<?> valueClass = value.getClass();
@@ -97,9 +98,15 @@ public class DataUtils2 {
                     }
                 }
             } else if (value instanceof IByteBufSerializable && haveUnserializeConstructor(valueClass)) {
-                ByteBuf byteBufRepr = ((IByteBufSerializable) value).serialize();
-                acc.writeShort(byteBufRepr.readableBytes());
-                acc.writeBytes(byteBufRepr);
+
+                int first = acc.readableBytes();
+                acc.writeShort(0);
+                ((IByteBufSerializable) value).serialize(acc);
+                int second = acc.readableBytes();
+
+                acc.writerIndex(first);
+                acc.writeShort(second-first);
+
             } else try {
                 for (Field field : value.getClass().getDeclaredFields())
                     if (!Modifier.isTransient(field.getModifiers())) {

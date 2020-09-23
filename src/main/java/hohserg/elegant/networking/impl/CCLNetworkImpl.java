@@ -50,11 +50,13 @@ public class CCLNetworkImpl implements Network<PacketCustom> {
         Integer id = ElegantNetworking.packetIdByPacketClassName.get(packetClassName);
         PacketCustom packetCustom = new PacketCustom(channel, id);
 
-        ByteBuf content = packet.serialize();
-        int size = content.readableBytes();
+        int first = packetCustom.readableBytes();
+        packetCustom.writeShort(0);
+        packet.serialize(packetCustom);
+        int second = packetCustom.readableBytes();
 
-        packetCustom.writeShort(size);
-        packetCustom.writeBytes(content);
+        packetCustom.writerIndex(first);
+        packetCustom.writeShort(second-first);
 
         return packetCustom;
     }
