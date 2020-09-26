@@ -37,9 +37,12 @@ public class ElegantPacketProcessor extends AbstractProcessor {
                     TypeElement typeElement = (TypeElement) annotatedElement;
 
                     if (annotatedElement.getModifiers().contains(Modifier.PUBLIC)) {
-                        checkInterfaces(typeElement);
+                        if (havePacketInterfaces(typeElement)) {
+                            note("Found elegant packet class: " + annotatedElement.asType() + " interfaces: " + typeElement.getInterfaces());
+                        } else
+                            error("The elegant packet class must implement ClientToServerPacket or ServerToClientPacket");
 
-                        note("Found elegant packet class: " + annotatedElement.asType() + " interfaces: " + typeElement.getInterfaces());
+
                     } else
                         error("The elegant packet class must be public");
 
@@ -52,21 +55,18 @@ public class ElegantPacketProcessor extends AbstractProcessor {
         return false;
     }
 
-    private boolean checkInterfaces(TypeElement typeElement) {
+    private boolean havePacketInterfaces(TypeElement typeElement) {
         TypeElement currentClass = typeElement;
         while (true) {
             for (TypeMirror anInterface : currentClass.getInterfaces()) {
                 note(anInterface.toString());
-                if(anInterface.toString()== ClientToServerPacket.class.getName() ||anInterface.toString()== ServerToClientPacket.class.getName() )
+                if (anInterface.toString().equals(ClientToServerPacket.class.getName()) || anInterface.toString().equals(ServerToClientPacket.class.getName()))
                     return true;
             }
             TypeMirror superClassType = currentClass.getSuperclass();
 
-            if (superClassType.getKind() == TypeKind.NONE) {
-                // Basis class (java.lang.Object) reached, so exit
-                error("The elegant packet class must implement ClientToServerPacket or ServerToClientPacket");
+            if (superClassType.getKind() == TypeKind.NONE)
                 return false;
-            }
 
             currentClass = (TypeElement) typeUtils.asElement(superClassType);
         }
