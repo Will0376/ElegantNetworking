@@ -38,31 +38,40 @@ public class ElegantPacketProcessor extends AbstractProcessor {
 
                     if (annotatedElement.getModifiers().contains(Modifier.PUBLIC)) {
                         if (havePacketInterfaces(typeElement)) {
-                            note("Found elegant packet class: " + annotatedElement.asType() + " interfaces: " + typeElement.getInterfaces());
+                            note(annotatedElement, "Found elegant packet class " + typeElement.getQualifiedName());
+                            buildSerializatorClass(typeElement);
                         } else
-                            error("The elegant packet class must implement ClientToServerPacket or ServerToClientPacket");
+                            error(annotatedElement, "The elegant packet class must implement ClientToServerPacket or ServerToClientPacket");
 
 
                     } else
-                        error("The elegant packet class must be public");
+                        error(annotatedElement, "The elegant packet class must be public");
 
                     break;
                 default:
-                    error("@ElegantPacket can be applied only to classes");
+                    error(annotatedElement, "@ElegantPacket can be applied only to classes");
 
             }
         }
         return false;
     }
 
+    private void buildSerializatorClass(TypeElement typeElement) {
+        for (Element element : typeElement.getEnclosedElements()) {
+            note(typeElement, "getEnclosedElements");
+            note(element, "");
+        }
+
+
+    }
+
     private boolean havePacketInterfaces(TypeElement typeElement) {
         TypeElement currentClass = typeElement;
         while (true) {
-            for (TypeMirror anInterface : currentClass.getInterfaces()) {
-                note(anInterface.toString());
+            for (TypeMirror anInterface : currentClass.getInterfaces())
                 if (anInterface.toString().equals(ClientToServerPacket.class.getName()) || anInterface.toString().equals(ServerToClientPacket.class.getName()))
                     return true;
-            }
+
             TypeMirror superClassType = currentClass.getSuperclass();
 
             if (superClassType.getKind() == TypeKind.NONE)
@@ -72,12 +81,12 @@ public class ElegantPacketProcessor extends AbstractProcessor {
         }
     }
 
-    private void note(String msg) {
-        messager.printMessage(Diagnostic.Kind.NOTE, msg);
+    private void note(Element e, String msg) {
+        messager.printMessage(Diagnostic.Kind.NOTE, msg, e);
     }
 
-    private void error(String msg) {
-        messager.printMessage(Diagnostic.Kind.ERROR, msg);
+    private void error(Element e, String msg) {
+        messager.printMessage(Diagnostic.Kind.ERROR, msg, e);
     }
 
     @Override
