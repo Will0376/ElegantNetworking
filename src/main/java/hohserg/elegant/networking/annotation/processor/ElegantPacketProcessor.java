@@ -59,7 +59,7 @@ public class ElegantPacketProcessor extends AbstractProcessor {
     private void buildSerializatorClass(TypeElement typeElement) {
         for (Element element : typeElement.getEnclosedElements()) {
             note(typeElement, "getEnclosedElements");
-            note(element, "");
+            note(element, "" + element);
         }
 
 
