@@ -3,7 +3,6 @@ package hohserg.elegant.networking.api;
 import hohserg.elegant.networking.impl.ElegantNetworking;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.network.play.INetHandlerPlayClient;
 import net.minecraft.world.World;
 
 /**
@@ -13,7 +12,7 @@ public interface ServerToClientPacket extends IByteBufSerializable {
     /**
      * Called when the packet is received
      */
-    void onReceive(Minecraft mc, INetHandlerPlayClient handler);
+    void onReceive(Minecraft mc);
 
     default void sendToPlayer(EntityPlayerMP player) {
         ElegantNetworking.getNetwork().sendToPlayer(this, player);

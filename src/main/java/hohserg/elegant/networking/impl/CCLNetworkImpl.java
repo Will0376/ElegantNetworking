@@ -61,13 +61,13 @@ public class CCLNetworkImpl implements Network<PacketCustom> {
     @Override
     public void onReceiveClient(PacketCustom packetRepresent) {
         this.<ServerToClientPacket>readObjectFromPacket(packetRepresent)
-                .onReceive(Minecraft.getMinecraft(), Minecraft.getMinecraft().getConnection());
+                .onReceive(Minecraft.getMinecraft());
     }
 
     @Override
     public void onReceiveServer(PacketCustom packetRepresent, EntityPlayerMP player) {
         this.<ClientToServerPacket>readObjectFromPacket(packetRepresent)
-                .onReceive(player, player.connection);
+                .onReceive(player);
     }
 
     private <A> A readObjectFromPacket(PacketCustom packetRepresent) {
