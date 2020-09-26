@@ -45,6 +45,7 @@ repositories {
 dependencies {
     compile "codechicken:CodeChickenLib:1.12.2-3.2.3.358:deobf"
     compileOnly 'org.projectlombok:lombok:1.18.8'
+    compileOnly 'com.google.auto.service:auto-service:1.0-rc1'
     // you may put jars on which you depend on in ./libs
     // or you may define them like so..
     //compile "some.group:artifact:version:classifier"
