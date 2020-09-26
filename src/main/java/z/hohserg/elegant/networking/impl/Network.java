@@ -1,7 +1,7 @@
-package hohserg.elegant.networking.impl;
+package z.hohserg.elegant.networking.impl;
 
-import hohserg.elegant.networking.api.ClientToServerPacket;
-import hohserg.elegant.networking.api.ServerToClientPacket;
+import z.hohserg.elegant.networking.api.ClientToServerPacket;
+import z.hohserg.elegant.networking.api.ServerToClientPacket;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.world.World;
 

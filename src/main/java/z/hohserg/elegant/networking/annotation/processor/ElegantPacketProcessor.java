@@ -1,10 +1,10 @@
-package hohserg.elegant.networking.annotation.processor;
+package z.hohserg.elegant.networking.annotation.processor;
 
 import com.google.auto.service.AutoService;
 import com.google.common.collect.ImmutableSet;
-import hohserg.elegant.networking.api.ClientToServerPacket;
-import hohserg.elegant.networking.api.ElegantPacket;
-import hohserg.elegant.networking.api.ServerToClientPacket;
+import z.hohserg.elegant.networking.api.ClientToServerPacket;
+import z.hohserg.elegant.networking.api.ElegantPacket;
+import z.hohserg.elegant.networking.api.ServerToClientPacket;
 
 import javax.annotation.processing.*;
 import javax.lang.model.SourceVersion;
@@ -53,7 +53,7 @@ public class ElegantPacketProcessor extends AbstractProcessor {
 
             }
         }
-        return true;
+        return false;
     }
 
     private void buildSerializatorClass(TypeElement typeElement) {

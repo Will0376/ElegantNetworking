@@ -1,9 +1,9 @@
-package hohserg.elegant.networking.impl;
+package z.hohserg.elegant.networking.impl;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
-import hohserg.elegant.networking.api.IByteBufSerializable;
+import z.hohserg.elegant.networking.api.IByteBufSerializable;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import net.minecraftforge.fml.common.network.ByteBufUtils;
@@ -17,8 +17,8 @@ import java.util.*;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
-import static hohserg.elegant.networking.impl.DataUtils2.CollectionFlags.ElementsCongeneric;
-import static hohserg.elegant.networking.impl.DataUtils2.CollectionFlags.ElementsHeterogeneric;
+import static z.hohserg.elegant.networking.impl.DataUtils2.CollectionFlags.ElementsCongeneric;
+import static z.hohserg.elegant.networking.impl.DataUtils2.CollectionFlags.ElementsHeterogeneric;
 
 public class DataUtils2 {
 
