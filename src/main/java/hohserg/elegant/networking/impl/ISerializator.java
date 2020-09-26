@@ -1,4 +1,4 @@
-package z.hohserg.elegant.networking.impl;
+package hohserg.elegant.networking.impl;
 
 import io.netty.buffer.ByteBuf;
 

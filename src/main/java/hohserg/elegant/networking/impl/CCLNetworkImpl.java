@@ -1,10 +1,10 @@
-package z.hohserg.elegant.networking.impl;
+package hohserg.elegant.networking.impl;
 
 import codechicken.lib.packet.ICustomPacketHandler;
 import codechicken.lib.packet.PacketCustom;
-import z.hohserg.elegant.networking.api.ClientToServerPacket;
-import z.hohserg.elegant.networking.api.IByteBufSerializable;
-import z.hohserg.elegant.networking.api.ServerToClientPacket;
+import hohserg.elegant.networking.api.ClientToServerPacket;
+import hohserg.elegant.networking.api.IByteBufSerializable;
+import hohserg.elegant.networking.api.ServerToClientPacket;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import net.minecraft.client.Minecraft;

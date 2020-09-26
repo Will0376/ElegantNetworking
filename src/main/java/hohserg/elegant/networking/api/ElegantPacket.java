@@ -1,4 +1,4 @@
-package z.hohserg.elegant.networking.api;
+package hohserg.elegant.networking.api;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

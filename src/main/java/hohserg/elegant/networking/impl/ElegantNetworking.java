@@ -1,7 +1,7 @@
-package z.hohserg.elegant.networking.impl;
+package hohserg.elegant.networking.impl;
 
-import z.hohserg.elegant.networking.api.ElegantPacket;
-import z.hohserg.elegant.networking.api.IByteBufSerializable;
+import hohserg.elegant.networking.api.ElegantPacket;
+import hohserg.elegant.networking.api.IByteBufSerializable;
 import lombok.Value;
 
 import java.util.HashMap;

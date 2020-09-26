@@ -1,6 +1,6 @@
-package z.hohserg.elegant.networking.api;
+package hohserg.elegant.networking.api;
 
-import z.hohserg.elegant.networking.impl.ElegantNetworking;
+import hohserg.elegant.networking.impl.ElegantNetworking;
 import net.minecraft.entity.player.EntityPlayerMP;
 
 /**

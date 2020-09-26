@@ -1,10 +1,10 @@
-package z.hohserg.elegant.networking.annotation.processor;
+package hohserg.elegant.networking.annotation.processor;
 
 import com.google.auto.service.AutoService;
 import com.google.common.collect.ImmutableSet;
-import z.hohserg.elegant.networking.api.ClientToServerPacket;
-import z.hohserg.elegant.networking.api.ElegantPacket;
-import z.hohserg.elegant.networking.api.ServerToClientPacket;
+import hohserg.elegant.networking.api.ClientToServerPacket;
+import hohserg.elegant.networking.api.ElegantPacket;
+import hohserg.elegant.networking.api.ServerToClientPacket;
 
 import javax.annotation.processing.*;
 import javax.lang.model.SourceVersion;

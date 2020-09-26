@@ -1,11 +1,11 @@
-package z.hohserg.elegant.networking.impl;
+package hohserg.elegant.networking.impl;
 
 import com.google.common.collect.SetMultimap;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.mojang.realmsclient.gui.ChatFormatting;
-import z.hohserg.elegant.networking.api.ClientToServerPacket;
-import z.hohserg.elegant.networking.api.ServerToClientPacket;
+import hohserg.elegant.networking.api.ClientToServerPacket;
+import hohserg.elegant.networking.api.ServerToClientPacket;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.ModContainer;
@@ -36,7 +36,7 @@ public class Main {
         for (ModContainer modContainer : Loader.instance().getActiveModList()) {
             SetMultimap<String, ASMDataTable.ASMData> annotationsFor = event.getAsmData().getAnnotationsFor(modContainer);
             if (annotationsFor != null) {
-                Set<ASMDataTable.ASMData> asmData = annotationsFor.get("z.hohserg.elegant.networking.api.ElegantPacket");
+                Set<ASMDataTable.ASMData> asmData = annotationsFor.get("hohserg.elegant.networking.api.ElegantPacket");
                 Comparator<ASMDataTable.ASMData> comparing = getAsmDataComparator(modContainer.getSource());
 
                 List<ASMDataTable.ASMData> rawPackets =
