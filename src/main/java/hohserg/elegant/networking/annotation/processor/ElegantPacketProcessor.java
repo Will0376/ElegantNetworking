@@ -53,7 +53,7 @@ public class ElegantPacketProcessor extends AbstractProcessor {
 
             }
         }
-        return false;
+        return true;
     }
 
     private void buildSerializatorClass(TypeElement typeElement) {
@@ -61,8 +61,6 @@ public class ElegantPacketProcessor extends AbstractProcessor {
             note(typeElement, "getEnclosedElements");
             note(element, "" + element);
         }
-
-
     }
 
     private boolean havePacketInterfaces(TypeElement typeElement) {
