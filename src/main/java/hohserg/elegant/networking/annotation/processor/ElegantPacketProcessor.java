@@ -7,6 +7,7 @@ import hohserg.elegant.networking.api.ElegantPacket;
 import javax.annotation.processing.*;
 import javax.lang.model.SourceVersion;
 import javax.lang.model.element.Element;
+import javax.lang.model.element.Modifier;
 import javax.lang.model.element.TypeElement;
 import javax.lang.model.util.Elements;
 import javax.lang.model.util.Types;
@@ -29,7 +30,13 @@ public class ElegantPacketProcessor extends AbstractProcessor {
         for (Element annotatedElement : roundEnv.getElementsAnnotatedWith(ElegantPacket.class)) {
             switch (annotatedElement.getKind()) {
                 case CLASS:
-                    note("found " + annotatedElement.getSimpleName());
+                    TypeElement typeElement = (TypeElement) annotatedElement;
+
+                    if (annotatedElement.getModifiers().contains(Modifier.PUBLIC)) {
+                        note("Found elegant packet class: " + annotatedElement.asType() + " interfaces: " + typeElement.getInterfaces());
+                    } else {
+                        error("Elegant packet class must be public");
+                    }
                     break;
                 default:
                     error("@ElegantPacket can be applied only to classes");
@@ -54,7 +61,7 @@ public class ElegantPacketProcessor extends AbstractProcessor {
 
     @Override
     public SourceVersion getSupportedSourceVersion() {
-        return SourceVersion.RELEASE_7;
+        return SourceVersion.latestSupported();
     }
 
     private Types typeUtils;
