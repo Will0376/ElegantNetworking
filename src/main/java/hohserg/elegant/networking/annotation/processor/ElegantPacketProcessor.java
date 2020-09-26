@@ -2,13 +2,17 @@ package hohserg.elegant.networking.annotation.processor;
 
 import com.google.auto.service.AutoService;
 import com.google.common.collect.ImmutableSet;
+import hohserg.elegant.networking.api.ClientToServerPacket;
 import hohserg.elegant.networking.api.ElegantPacket;
+import hohserg.elegant.networking.api.ServerToClientPacket;
 
 import javax.annotation.processing.*;
 import javax.lang.model.SourceVersion;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.Modifier;
 import javax.lang.model.element.TypeElement;
+import javax.lang.model.type.TypeKind;
+import javax.lang.model.type.TypeMirror;
 import javax.lang.model.util.Elements;
 import javax.lang.model.util.Types;
 import javax.tools.Diagnostic;
@@ -33,10 +37,12 @@ public class ElegantPacketProcessor extends AbstractProcessor {
                     TypeElement typeElement = (TypeElement) annotatedElement;
 
                     if (annotatedElement.getModifiers().contains(Modifier.PUBLIC)) {
+                        checkInterfaces(typeElement);
+
                         note("Found elegant packet class: " + annotatedElement.asType() + " interfaces: " + typeElement.getInterfaces());
-                    } else {
-                        error("Elegant packet class must be public");
-                    }
+                    } else
+                        error("The elegant packet class must be public");
+
                     break;
                 default:
                     error("@ElegantPacket can be applied only to classes");
@@ -44,6 +50,26 @@ public class ElegantPacketProcessor extends AbstractProcessor {
             }
         }
         return false;
+    }
+
+    private boolean checkInterfaces(TypeElement typeElement) {
+        TypeElement currentClass = typeElement;
+        while (true) {
+            for (TypeMirror anInterface : currentClass.getInterfaces()) {
+                note(anInterface.toString());
+                if(anInterface.toString()== ClientToServerPacket.class.getName() ||anInterface.toString()== ServerToClientPacket.class.getName() )
+                    return true;
+            }
+            TypeMirror superClassType = currentClass.getSuperclass();
+
+            if (superClassType.getKind() == TypeKind.NONE) {
+                // Basis class (java.lang.Object) reached, so exit
+                error("The elegant packet class must implement ClientToServerPacket or ServerToClientPacket");
+                return false;
+            }
+
+            currentClass = (TypeElement) typeUtils.asElement(superClassType);
+        }
     }
 
     private void note(String msg) {
