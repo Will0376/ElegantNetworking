@@ -9,6 +9,7 @@ import hohserg.elegant.networking.api.ServerToClientPacket;
 import javax.annotation.processing.*;
 import javax.lang.model.SourceVersion;
 import javax.lang.model.element.Element;
+import javax.lang.model.element.ElementKind;
 import javax.lang.model.element.Modifier;
 import javax.lang.model.element.TypeElement;
 import javax.lang.model.type.TypeKind;
@@ -16,6 +17,8 @@ import javax.lang.model.type.TypeMirror;
 import javax.lang.model.util.Elements;
 import javax.lang.model.util.Types;
 import javax.tools.Diagnostic;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 @AutoService(Processor.class)
@@ -57,8 +60,16 @@ public class ElegantPacketProcessor extends AbstractProcessor {
     }
 
     private void buildSerializatorClass(TypeElement typeElement) {
+        List<Element> publicFields = new ArrayList<>();
+        System.out.println(typeElement.getAnnotationMirrors().get(0).getAnnotationType().asElement().getSimpleName());
         for (Element element : typeElement.getEnclosedElements()) {
-            note(typeElement, "getEnclosedElements");
+            if (element.getKind() == ElementKind.FIELD) {
+                if (element.getModifiers().contains(Modifier.PUBLIC)) {
+                    publicFields.add(element);
+                } else {
+
+                }
+            }
             note(element, "" + element);
         }
     }
