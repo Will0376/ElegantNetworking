@@ -62,7 +62,7 @@ public class ElegantPacketProcessor extends AbstractProcessor {
     private void buildSerializatorClass(TypeElement typeElement) {
         List<Element> publicFields = new ArrayList<>();
         typeElement.getAnnotationMirrors().forEach(a ->
-                note(typeElement, a.getAnnotationType().asElement().getSimpleName().toString()));
+                note(typeElement, a.getAnnotationType().asElement().toString()));
         for (Element element : typeElement.getEnclosedElements()) {
             if (element.getKind() == ElementKind.FIELD) {
                 if (element.getModifiers().contains(Modifier.PUBLIC)) {
